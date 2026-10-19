@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Can you spot the Scam? | Interactive Cyber Detective Academy</title>
+  <meta name="description" content="An interactive, gamified cybersecurity educational web app for students to master phishing detection, scam spotting, malware traps, and AI voice cloning defense.">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Outfit:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Confetti Canvas Particle Container -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- Interactive Lesson Reader Modal Dialog -->
+  <div id="lesson-modal-overlay" class="modal-overlay" style="display: none;" onclick="if(event.target === this) app.closeLessonModal()">
+    <div class="modal-content" role="dialog" aria-modal="true">
+      <div class="modal-header">
+        <div>
+          <h2 id="lesson-modal-title">Lesson Title</h2>
+          <span class="modal-tag" id="lesson-modal-tag">Tag info</span>
+        </div>
+        <button class="btn-close-modal" onclick="app.closeLessonModal()" title="Close Lesson">✖</button>
+      </div>
+      <div class="modal-body" id="lesson-modal-body">
+        <!-- Rich lesson content -->
+      </div>
+      <div class="modal-footer-actions" id="lesson-modal-actions">
+        <!-- Dynamic actions -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Sticky Top Navigation Bar -->
+  <nav class="top-nav" aria-label="Main Navigation">
+    <div class="container">
+      <div class="nav-content">
+        <div class="brand-logo" onclick="app.switchView('lessons')">
+          <div class="logo-badge">🛡️</div>
+          <div class="logo-text">
+            <h1>Can you spot the Scam?</h1>
+            <span>Cyber Detective Academy</span>
+          </div>
+        </div>
+
+        <div class="nav-stats">
+          <div class="stat-pill level-pill" id="nav-level-pill">
+            <span class="icon">🌱</span> Cyber Rookie
+          </div>
+          <div class="stat-pill xp-pill" id="nav-xp-pill">
+            <span class="icon">⚡</span> 0 XP
+          </div>
+          <button class="sound-toggle-btn" id="sound-toggle-btn" title="Toggle Sound Effects">
+            🔊 Sound ON
+          </button>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <div class="nav-menu-bar" role="tablist">
+        <button class="nav-tab-btn active" data-view="lessons" role="tab">
+          <span>📚 Lessons & Modules</span>
+        </button>
+        <button class="nav-tab-btn" data-view="simulator" role="tab">
+          <span>🔍 Scam Inspector Arena</span>
+        </button>
+        <button class="nav-tab-btn" data-view="minigame" role="tab">
+          <span>⚡ Rapid Scam Buster</span>
+        </button>
+        <button class="nav-tab-btn" data-view="quiz" role="tab">
+          <span>🎯 Quiz Arena</span>
+        </button>
+        <button class="nav-tab-btn" data-view="badges" role="tab">
+          <span>🏆 Badges & Certificate</span>
+        </button>
+        <button class="nav-tab-btn" data-view="survival" role="tab">
+          <span>🆘 Survival Guide</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main App Content -->
+  <main class="container">
+
+    <!-- Hero Banner Section -->
+    <header class="hero-section">
+      <div class="hero-card">
+        <div class="hero-text-content">
+          <div class="hero-tag">⚡ Interactive Cyber Training for Students</div>
+          <h2 class="hero-title">Think You Can't Be Tricked? Put Your Eyes To The Test!</h2>
+          <p class="hero-desc">
+            Learn to spot phishing emails, fake gaming giveaways, fraudulent parcel texts, and sneaky malware downloads through live interactive simulations and rapid-fire challenges!
+          </p>
+          <div class="hero-actions">
+            <button class="btn-primary" onclick="app.switchView('simulator')">
+              <span>🚀 Start Inspecting Scams</span>
+            </button>
+            <button class="btn-secondary" onclick="app.switchView('minigame')">
+              <span>⚡ Play Rapid Buster</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="hero-widget">
+          <div class="widget-header">
+            <div class="widget-title">
+              <span>🕵️ Detective Dossier</span>
+            </div>
+            <div class="rank-badge-display" id="hero-rank-badge">
+              🌱 Cyber Rookie
+            </div>
+          </div>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar-fill" id="hero-progress-fill"></div>
+          </div>
+          <div class="widget-subtext">
+            <span id="hero-xp-display">0 Total XP</span>
+            <span id="hero-next-rank">Next: Junior Scout (150 XP)</span>
+          </div>
+
+          <div class="hero-mini-badges" id="hero-mini-badges">
+            <!-- Dynamically populated mini badges -->
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- =========================================================================
+         VIEW 1: LESSONS & MODULES
+         ========================================================================= -->
+    <section id="view-lessons" class="view-section active">
+      <div class="section-header">
+        <span class="section-tag">Cyber Threat Intelligence</span>
+        <h2 class="section-title">5 Core Scam Detection Modules</h2>
+        <p class="section-subtitle">
+          Master the psychological tricks and sneaky red flags scammers use to target students on everyday apps.
+        </p>
+      </div>
+
+      <div class="lessons-grid" id="lessons-grid">
+        <!-- Dynamically populated from data.js -->
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         VIEW 2: INTERACTIVE SCAM INSPECTOR ARENA
+         ========================================================================= -->
+    <section id="view-simulator" class="view-section">
+      <div class="section-header">
+        <span class="section-tag">Hands-On Investigation</span>
+        <h2 class="section-title">"Spot The Scam" Inspector Arena</h2>
+        <p class="section-subtitle">
+          Inspect realistic simulated messages! Hover over links, click on suspicious red flags, and submit your final verdict.
+        </p>
+      </div>
+
+      <div class="simulator-container">
+        <!-- Scenario Selector Tabs -->
+        <div class="sim-controls-bar">
+          <div class="sim-scenarios-pills" id="sim-scenarios-pills">
+            <!-- Pills populated from data.js -->
+          </div>
+        </div>
+
+        <!-- Instruction Banner -->
+        <div class="inspector-instruction-banner">
+          <div class="left-info">
+            <span>🔎 <strong>Detective Mission:</strong> Click any suspicious elements in the preview to investigate clues!</span>
+          </div>
+          <div class="red-flags-count" id="red-flags-detected-count">
+            0 / 3 Red Flags Discovered
+          </div>
+        </div>
+
+        <!-- Realistic Mockup Window -->
+        <div class="simulator-window" id="simulator-window-stage">
+          <!-- Dynamically populated scenario UI -->
+        </div>
+
+        <!-- Verdict Controls Toolbar -->
+        <div class="inspector-verdict-bar">
+          <div class="verdict-question">
+            Ready to make your call? What is your verdict?
+          </div>
+          <div class="verdict-btns-group">
+            <button class="btn-verdict btn-verdict-safe" onclick="app.submitVerdict(false)">
+              <span>🛡️ Safe & Legitimate</span>
+            </button>
+            <button class="btn-verdict btn-verdict-scam" onclick="app.submitVerdict(true)">
+              <span>🚨 SCAM / PHISHING!</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Verdict Feedback Result Modal -->
+        <div class="verdict-result-modal" id="verdict-result-modal">
+          <!-- Populated on verdict submit -->
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         VIEW 3: RAPID SCAM BUSTER MINI-GAME
+         ========================================================================= -->
+    <section id="view-minigame" class="view-section">
+      <div class="section-header">
+        <span class="section-tag">High-Speed Reflex Training</span>
+        <h2 class="section-title">⚡ Rapid Scam Buster</h2>
+        <p class="section-subtitle">
+          How quickly can your brain spot danger? Click Scam vs Safe or use [Arrow Left] / [Arrow Right] before time runs out!
+        </p>
+      </div>
+
+      <div class="minigame-arena">
+        <!-- Game HUD -->
+        <div class="game-hud">
+          <div class="hud-item hud-score">
+            <span>Score:</span>
+            <span id="rapid-score-val">0</span>
+          </div>
+          <div class="hud-item">
+            <span id="rapid-card-number">Card 1 of 10</span>
+          </div>
+          <div class="hud-item hud-streak">
+            <span>🔥 Streak:</span>
+            <span id="rapid-streak-val">0</span>
+          </div>
+        </div>
+
+        <!-- Flashcard Area -->
+        <div id="rapid-card-container">
+          <div class="rapid-card-stage">
+            <div class="rapid-flashcard" id="rapid-flashcard-box">
+              <div class="rapid-card-icon">📩</div>
+              <p class="rapid-scenario-text" id="rapid-card-text">
+                Loading incoming scenario...
+              </p>
+            </div>
+          </div>
+
+          <!-- Fast Action Buttons -->
+          <div class="rapid-controls">
+            <button class="btn-rapid-action btn-rapid-scam" onclick="app.submitRapidChoice(true)" title="Hotkey: Left Arrow or 1">
+              <span>🚨 SCAM! [←]</span>
+            </button>
+            <button class="btn-rapid-action btn-rapid-legit" onclick="app.submitRapidChoice(false)" title="Hotkey: Right Arrow or 2">
+              <span>🛡️ SAFE! [→]</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Game Over Summary Card -->
+        <div class="game-over-card" id="rapid-game-over" style="display: none;">
+          <div style="font-size: 56px; margin-bottom: 14px;">⚡🎉</div>
+          <h3 style="font-family: var(--font-heading); font-size: 28px; margin-bottom: 10px;">Round Completed!</h3>
+          <p style="color: #D1D5DB; font-size: 16px; margin-bottom: 24px;">
+            Your Detective Score: <strong id="rapid-final-score" style="color: var(--cyan-neon); font-size: 22px;">0</strong>
+          </p>
+          <div style="display: flex; justify-content: center; gap: 14px;">
+            <button class="btn-primary" onclick="app.initRapidMinigame()">
+              <span>🔄 Play Again</span>
+            </button>
+            <button class="btn-secondary" onclick="app.switchView('lessons')">
+              <span>📚 Back to Lessons</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         VIEW 4: QUIZ ARENA
+         ========================================================================= -->
+    <section id="view-quiz" class="view-section">
+      <div class="section-header">
+        <span class="section-tag">Knowledge Check</span>
+        <h2 class="section-title">Cyber Knowledge Arena</h2>
+        <p class="section-subtitle">
+          Select any module quiz below, test your knowledge, and earn up to +200 XP and certified detective badges!
+        </p>
+      </div>
+
+      <!-- Quiz Selector Navigation -->
+      <div class="quiz-modules-selector-wrap" id="quiz-modules-selector">
+        <!-- Dynamically populated from data.js -->
+      </div>
+
+      <div class="quiz-runner-card">
+        <div id="quiz-card-content">
+          <!-- Populated by app.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         VIEW 5: BADGES & CERTIFICATE SHOWCASE
+         ========================================================================= -->
+    <section id="view-badges" class="view-section">
+      <div class="section-header">
+        <span class="section-tag">Achievements & Accreditation</span>
+        <h2 class="section-title">Detective Badges & Certificate</h2>
+        <p class="section-subtitle">
+          Unlock all security badges to earn your certified Junior Cyber Detective diploma!
+        </p>
+      </div>
+
+      <!-- Badges Showcase Grid -->
+      <div class="badges-grid" id="badges-grid">
+        <!-- Dynamically populated from data.js -->
+      </div>
+
+      <!-- Official Printable Certificate -->
+      <div class="certificate-preview-wrap">
+        <div class="cert-stamp">🛡️</div>
+        <div class="cert-header">
+          <h2>Official Certificate of Cybersecurity Competence</h2>
+          <span>Cyber Detective Academy • Spot The Scam Initiative</span>
+        </div>
+
+        <input type="text" class="cert-name-input" id="cert-player-name" value="Agent Alex" placeholder="Enter Your Name">
+
+        <p class="cert-text">
+          Has demonstrated exceptional critical thinking, eagle-eyed observation, and mastery in detecting phishing emails, malicious gaming traps, mobile smishing scams, and Trojan downloads.
+        </p>
+
+        <div class="cert-footer-meta">
+          <div>
+            <strong>Status:</strong> <span style="color:#10B981;">VERIFIED DETECTIVE</span>
+          </div>
+          <div>
+            <strong>Date:</strong> <span>September 2026</span>
+          </div>
+          <div>
+            <strong>Issuer:</strong> <span>Global Cyber Safety Board</span>
+          </div>
+        </div>
+
+        <div style="margin-top: 32px;">
+          <button class="btn-primary" id="btn-print-cert">
+            <span>🖨️ Print / Save Certificate PDF</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         VIEW 6: SURVIVAL GUIDE & EMERGENCY CHECKLIST
+         ========================================================================= -->
+    <section id="view-survival" class="view-section">
+      <div class="section-header">
+        <span class="section-tag">Emergency Action Protocol</span>
+        <h2 class="section-title">What To Do If You Or A Friend Got Scammed</h2>
+        <p class="section-subtitle">
+          Stay calm! Follow these immediate 5 recovery steps to protect accounts and shut down fraudsters.
+        </p>
+      </div>
+
+      <div class="checklist-grid" id="checklist-grid">
+        <!-- Populated from data.js -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p style="margin-bottom: 8px; font-weight: 700; color: #E2E8F0;">
+        "Can you spot the Scam?" • Interactive Cybersecurity Education Platform
+      </p>
+      <p>
+        Built with high-contrast vibrant design and zero external dependencies for student privacy and speed.
+      </p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
